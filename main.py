@@ -5,16 +5,17 @@ import base64
 import urllib
 import spotipy
 import datetime
+from random import randint
 
 # Authentication Steps, paramaters, and responses are defined at https://developer.spotify.com/web-api/authorization-guide/
 # Visit this url to see all the steps, parameters, and expected response.
 
 app = Flask(__name__)
-app.secret_key = 'asdjhu3ad3hu'
+app.secret_key = 'asdjhu3ad3hu' #used to run sessions
 
 #  Client Keys
-CLIENT_ID = "62bfab0e397541528d6616594c7fab29"
-CLIENT_SECRET = "cfc206dfcc8c4ecfb67f423d6e2c3b08"
+CLIENT_ID = "[YOUR-CLIENT-ID]"
+CLIENT_SECRET = "[YOUR-CLIENT-SECRET]"
 
 # Spotify URLS
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
@@ -92,10 +93,11 @@ def callback():
     username = str(sp.current_user()['id'])
     returnString = ''
     for i in years:
-        results = sp.search(q='year:' + str(i), type='track', limit = 1)
-        track = results['tracks']['items'][0]['name']
-        artist = results['tracks']['items'][0]
-        uri = results['tracks']['items'][0]
+        index = randint(0,2)
+        results = sp.search(q='year:' + str(i), type='track', limit = 3)
+        track = results['tracks']['items'][index]['name']
+        artist = results['tracks']['items'][index]
+        uri = results['tracks']['items'][index]
         #returnString += str(results) + ' || '
         returnString = 'year: ' + str(i) + ' ' + track + ' BY ' + artist['artists'][0]['name'] + ' URI = ' + uri['uri']
         tracksToAdd.append(uri['uri'])
